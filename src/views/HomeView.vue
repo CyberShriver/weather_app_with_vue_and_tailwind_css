@@ -10,7 +10,7 @@
             <p v-if="searchError" class="py-2">Sorry, something went wrong, please try again.</p>
             <p class="py-2" v-if="!searchError && mapboxSearchResults.length===0"> No results match your query, try a different term.</p>
             <template v-else>
-              <li v-for="searchResult in mapboxSearchResults" :key="searchResult.id" class="py-2 cursor-pointer">
+              <li v-for="searchResult in mapboxSearchResults" :key="searchResult.id" class="py-2 cursor-pointer" @click="preview(searchResult)">
                 {{ searchResult.place_name }}
               </li>
             </template>
@@ -21,6 +21,7 @@
 <script setup>
 import { ref } from "@vue/reactivity";
 import axios from 'axios'
+import { useRouter } from "vue-router";
 
 const mapboxAPIKey =
   "pk.eyJ1Ijoiam9obmtvbWFybmlja2kiLCJhIjoiY2t5NjFzODZvMHJkaDJ1bWx6OGVieGxreSJ9.IpojdT3U3NENknF6_WhR2Q";
@@ -28,7 +29,23 @@ const searchQuery=ref("");
 const QueryTimeOut=ref(null);
 const mapboxSearchResults=ref("");
 const searchError = ref(null);
+const router=useRouter();
 
+const preview=(mapboxSearchResults)=>{
+  console.log(mapboxSearchResults);
+  const [city,state]=mapboxSearchResults.place_name.split(",");
+  console.log(city,state);
+  router.push({
+    name:"city",
+    params:{city:city,state:state.replaceAll(" ", "")},
+    query:{
+      lat:mapboxSearchResults.geometry.coordinates[1],
+      lng:mapboxSearchResults.geometry.coordinates[0],
+      preview:true
+    }
+  })
+
+}
 const getSearchResults=()=>{
   clearTimeout(QueryTimeOut.value);
   QueryTimeOut.value=setTimeout(async()=>{
