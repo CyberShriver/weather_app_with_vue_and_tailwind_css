@@ -19,15 +19,8 @@
           "
           @click="toggleModal"
         ></i>
-        <i
-          class="
-            fa-solid fa-plus
-            text-xl
-            hover:text-weather-secondary
-            duration-150
-            cursor-pointer
-          "
-        ></i>
+        <i class="fa-solid fa-plus text-xl hover:text-weather-secondaryduration-150cursor-pointer"
+         @click="AddCity" v-if="route.query.preview"></i>
       </div>
 
       <GlobalModal :modalActive="modalActive" @close-modal="toggleModal">
@@ -67,9 +60,43 @@
 <script setup>
 import { ref } from "@vue/reactivity";
 import GlobalModal from "./GlobalModal.vue";
+import {uid} from "uid"
+import { useRoute, useRouter } from "vue-router";
 
 const modalActive = ref(null);
+const savedCities=ref([]);
+const route=useRoute();
+const router=useRouter();
+
 const toggleModal = () => {
   modalActive.value = !modalActive.value;
 };
+
+const AddCity=()=>{
+  if(localStorage.getItem(savedCities)){
+    savedCities.value=JSON.parse(savedCities);
+  }
+
+  const locations={
+    id:uid(),
+    city:route.params.city,
+    state:route.params.state,
+    coords:{
+      lat:route.query.lat,
+      lng:route.query.lng
+     }
+  }
+
+  savedCities.value.push(locations);
+
+  localStorage.setItem(
+    'savedCities',
+    JSON.stringify(savedCities)
+  )
+
+  let query=Object.assign({},route.query);
+   delete query.preview
+   router.replace({query});
+}
+
 </script>
