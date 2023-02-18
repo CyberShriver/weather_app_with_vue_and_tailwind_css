@@ -73,8 +73,10 @@ const toggleModal = () => {
 };
 
 const AddCity=()=>{
-  if(localStorage.getItem(savedCities)){
-    savedCities.value=JSON.parse(savedCities);
+  if(localStorage.getItem('savedCities')){
+    savedCities.value=JSON.parse(
+      localStorage.getItem('savedCities')
+    );
   }
 
   const locations={
@@ -91,7 +93,7 @@ const AddCity=()=>{
 
   localStorage.setItem(
     'savedCities',
-    JSON.stringify(savedCities)
+    JSON.stringify(savedCities.value)
   )
 
   let query=Object.assign({},route.query);
