@@ -2,11 +2,8 @@
   <main class="container text-white ">
     <div class="pt-4 mb-8 relative">
       <input type="text" placeholder="search city or state" v-model="searchQuery"  @input="getSearchResults"
-      class="py-2 px-1 w-full bg-transparent border-b focus:border-weather-secondary focus:outline-none focus:shadow-[0px_1px_0_0_#004E71]">
-      
-          <ul class="absolute bg-weather-secondary text-white w-full shadow-md py-2 px-1 top-[66px]"
-              v-if="mapboxSearchResults">
-
+      class="py-2 px-1 w-full bg-transparent border-b focus:border-weather-secondary focus:outline-none focus:shadow-[0px_1px_0_0_#004E71]">      
+          <ul class="absolute bg-weather-secondary text-white w-full shadow-md py-2 px-1 top-[66px]" v-if="mapboxSearchResults">
             <p v-if="searchError" class="py-2">Sorry, something went wrong, please try again.</p>
             <p class="py-2" v-if="!searchError && mapboxSearchResults.length===0"> No results match your query, try a different term.</p>
             <template v-else>
@@ -23,8 +20,7 @@ import { ref } from "@vue/reactivity";
 import axios from 'axios'
 import { useRouter } from "vue-router";
 
-const mapboxAPIKey =
-  "pk.eyJ1Ijoiam9obmtvbWFybmlja2kiLCJhIjoiY2t5NjFzODZvMHJkaDJ1bWx6OGVieGxreSJ9.IpojdT3U3NENknF6_WhR2Q";
+const mapboxAPIKey ="pk.eyJ1Ijoiam9obmtvbWFybmlja2kiLCJhIjoiY2t5NjFzODZvMHJkaDJ1bWx6OGVieGxreSJ9.IpojdT3U3NENknF6_WhR2Q";
 const searchQuery=ref("");
 const QueryTimeOut=ref(null);
 const mapboxSearchResults=ref("");
@@ -36,7 +32,7 @@ const preview=(mapboxSearchResults)=>{
   const [city,state]=mapboxSearchResults.place_name.split(",");
   console.log(city,state);
   router.push({
-    name:"city",
+    name:"cityView",
     params:{city:city,state:state.replaceAll(" ", "")},
     query:{
       lat:mapboxSearchResults.geometry.coordinates[1],
@@ -44,8 +40,8 @@ const preview=(mapboxSearchResults)=>{
       preview:true
     }
   })
-
 }
+
 const getSearchResults=()=>{
   clearTimeout(QueryTimeOut.value);
   QueryTimeOut.value=setTimeout(async()=>{
