@@ -153,6 +153,12 @@ const getWeatherData= async()=>{
         utc + 1000 * weatherData.data.timezone_offset;
     });
 
+     // fliker delay 
+     new Promise((res)=>{
+      setTimeout(res,1000);
+     })
+    //  end of fliker delay
+
     return weatherData.data;
         
     } catch (error) {

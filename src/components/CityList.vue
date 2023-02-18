@@ -33,6 +33,12 @@ const getCities = async () => {
 
     const weatherData = await Promise.all(requests);
 
+    // fliker delay 
+     new Promise((res)=>{
+      setTimeout(res,1000);
+     })
+    //  end of fliker delay
+    
     weatherData.forEach((value, index) => {
       savedCities.value[index].weather = value.data;
     });
